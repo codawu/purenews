@@ -228,7 +228,6 @@ hugo.linux
 *.exe
 *.exe~
 *.dll
-*.so
 *.dylib
 
 # Test binary, built with `go test -c`
@@ -256,13 +255,11 @@ hugo.linux
 # Generated files
 bin/
 gen/
-out/
 #  Uncomment the following line in case you need and you don't have the release build type files in your app
 # release/
 
 # Gradle files
 .gradle/
-build/
 
 # Local configuration file (sdk path, etc)
 local.properties
@@ -271,7 +268,6 @@ local.properties
 proguard/
 
 # Log Files
-*.log
 
 # Android Studio Navigation editor temp files
 .navigation/
