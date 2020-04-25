@@ -1,0 +1,13 @@
+server:
+  address: "0.0.0.0:8080"
+log:
+  file:
+    enabled: true
+    filename: app.log
+  fluent:
+    enabled: true
+    host: 127.0.0.1
+    port: 8125
+  sentry:
+    enabled: true
+    dsn: ""
