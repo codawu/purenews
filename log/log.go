@@ -21,19 +21,29 @@ func NewLogger(logger *zap.Logger) Logger {
 }
 
 func Init() error {
-	zapCfg := zap.NewProductionConfig()
+	var zapCfg zap.Config
+	if config.Config.Log.Debug {
+		zapCfg = zap.NewDevelopmentConfig()
+	} else {
+		zapCfg = zap.NewProductionConfig()
+	}
 	zapCfg.Sampling = nil
 	zapLogger, err := zapCfg.Build()
 	if err != nil {
 		return fmt.Errorf("init logger error %q", err)
 	}
-	productionEncoder := zapcore.NewJSONEncoder(zap.NewDevelopmentEncoderConfig())
+	var encoder zapcore.Encoder
+	if config.Config.Log.Debug {
+		encoder = zapcore.NewJSONEncoder(zap.NewDevelopmentEncoderConfig())
+	} else {
+		encoder = zapcore.NewJSONEncoder(zap.NewProductionEncoderConfig())
+	}
 	var cores []zapcore.Core
 	fileLog := config.Config.Log.FileLog
 	if fileLog.Enabled {
 		fileLogger := NewFileLogger(fileLog.Filename)
 		fileOut := zapcore.AddSync(fileLogger)
-		fileCore := zapcore.NewCore(productionEncoder, fileOut, zapcore.InfoLevel)
+		fileCore := zapcore.NewCore(encoder, fileOut, zapcore.InfoLevel)
 		cores = append(cores, fileCore)
 	}
 	sentryLog := config.Config.Log.SentryLog

@@ -10,6 +10,7 @@ type DBCfg struct {
 }
 
 type LogCfg struct {
+	Debug     bool         `json:"debug"`
 	FileLog   FileLogCfg   `json:"file"`
 	SentryLog SentryLogCfg `json:"sentry"`
 	FluentLog FluentLogCfg `json:"fluent"`
