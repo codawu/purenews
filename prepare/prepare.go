@@ -55,10 +55,6 @@ func listen(router Router) error {
   start web service
 */
 func Serve(router Router) error {
-	err := Init()
-	if err != nil {
-		return err
-	}
 	return listen(router)
 }
 
@@ -75,10 +71,6 @@ type TaskQueue interface {
 
 //
 func Worker(tick *<-chan time.Time, queue TaskQueue) error {
-	err := Init()
-	if err != nil {
-		return err
-	}
 	for {
 		if tick != nil {
 			<-*tick

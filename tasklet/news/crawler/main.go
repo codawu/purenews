@@ -33,8 +33,14 @@ func (queue *NewsTaskQueue) Push(prepare.Task) error {
 	return nil
 }
 
+const DefaultQPS = 500
+
 func main() {
-	tick := time.Tick(time.Second / time.Duration(500))
+	if err := prepare.Init(); err != nil {
+		fmt.Printf("Prepare init error %q \n", err)
+		os.Exit(1)
+	}
+	tick := time.Tick(time.Second / time.Duration(DefaultQPS))
 	if err := prepare.Worker(&tick, new(NewsTaskQueue)); err != nil {
 		fmt.Printf("worker start error %q\n", err)
 		os.Exit(-1)
