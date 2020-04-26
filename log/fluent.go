@@ -51,10 +51,10 @@ func init() {
 	hostName, _ = os.Hostname()
 }
 
-func NewFluentCore(cfg fluent.Config, enab zapcore.LevelEnabler) (zapcore.Core, error) {
+func NewFluentCore(cfg fluent.Config, enabler zapcore.LevelEnabler) (zapcore.Core, error) {
 	client, err := fluent.New(cfg)
 	return &FluentCore{
-		LevelEnabler: enab,
+		LevelEnabler: enabler,
 		client:       client,
 		fields:       make(map[string]interface{}),
 	}, err
