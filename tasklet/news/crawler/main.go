@@ -41,7 +41,7 @@ func main() {
 		os.Exit(1)
 	}
 	tick := time.Tick(time.Second / time.Duration(DefaultQPS))
-	if err := prepare.Worker(&tick, new(NewsTaskQueue)); err != nil {
+	if err := prepare.Worker(tick, new(NewsTaskQueue)); err != nil {
 		fmt.Printf("worker start error %q\n", err)
 		os.Exit(-1)
 	}

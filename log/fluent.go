@@ -1,10 +1,9 @@
 package log
 
-import (
-	"os"
-
+import ( //nolint:goimports
 	"github.com/fluent/fluent-logger-golang/fluent"
 	"go.uber.org/zap/zapcore"
+	"os"
 )
 
 const (
@@ -45,14 +44,8 @@ func fluentLevel(lvl zapcore.Level) string {
 	}
 }
 
-var hostName string
-
-func init() {
-	hostName, _ = os.Hostname()
-}
-
-func NewFluentCore(cfg fluent.Config, enabler zapcore.LevelEnabler) (zapcore.Core, error) {
-	client, err := fluent.New(cfg)
+func NewFluentCore(cfg *fluent.Config, enabler zapcore.LevelEnabler) (zapcore.Core, error) {
+	client, err := fluent.New(*cfg)
 	return &FluentCore{
 		LevelEnabler: enabler,
 		client:       client,
@@ -71,18 +64,18 @@ func (core *FluentCore) With(fields []zapcore.Field) zapcore.Core {
 	return core.with(fields)
 }
 
-func (core *FluentCore) Check(ent zapcore.Entry, ce *zapcore.CheckedEntry) *zapcore.CheckedEntry {
+func (core *FluentCore) Check(ent zapcore.Entry, ce *zapcore.CheckedEntry) *zapcore.CheckedEntry { //nolint:gocritic
 	if core.Enabled(ent.Level) {
 		return ce.AddCore(ent, core)
 	}
 	return ce
 }
 
-func (core *FluentCore) Write(ent zapcore.Entry, fields []zapcore.Field) error {
+func (core *FluentCore) Write(ent zapcore.Entry, fields []zapcore.Field) error { //nolint:gocritic
 	clone := core.with(fields)
-
+	hostname, _ := os.Hostname()
 	packet := &Packet{
-		Host:      hostName,
+		Host:      hostname,
 		Name:      ent.Message,
 		Timestamp: ent.Time.Format("2006-01-02T15:04:05"),
 		Level:     fluentLevel(ent.Level),

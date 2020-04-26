@@ -70,10 +70,10 @@ type TaskQueue interface {
 }
 
 //
-func Worker(tick *<-chan time.Time, queue TaskQueue) error {
+func Worker(tick <-chan time.Time, queue TaskQueue) error {
 	for {
 		if tick != nil {
-			<-*tick
+			<-tick
 		}
 		task, err := queue.Pop()
 		if err != nil {

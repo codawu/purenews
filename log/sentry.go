@@ -32,14 +32,14 @@ func (core *SentryCore) With(fields []zapcore.Field) zapcore.Core {
 	return core.with(fields)
 }
 
-func (core *SentryCore) Check(ent zapcore.Entry, ce *zapcore.CheckedEntry) *zapcore.CheckedEntry {
+func (core *SentryCore) Check(ent zapcore.Entry, ce *zapcore.CheckedEntry) *zapcore.CheckedEntry { //nolint:gocritic
 	if core.Enabled(ent.Level) {
 		return ce.AddCore(ent, core)
 	}
 	return ce
 }
 
-func (core *SentryCore) Write(ent zapcore.Entry, fields []zapcore.Field) error {
+func (core *SentryCore) Write(ent zapcore.Entry, fields []zapcore.Field) error { //nolint:gocritic
 	clone := core.with(fields)
 
 	packet := &raven.Packet{

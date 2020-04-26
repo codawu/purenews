@@ -5,7 +5,7 @@ import (
 	"github.com/fluent/fluent-logger-golang/fluent"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
-	"purenews/config" //nolint:goimports
+	"purenews/config"
 )
 
 var (
@@ -59,7 +59,7 @@ func Init() error {
 	}
 	fluentLog := config.Config.Log.FluentLog
 	if fluentLog.Enabled {
-		fluentCore, err := NewFluentCore(fluent.Config{
+		fluentCore, err := NewFluentCore(&fluent.Config{
 			FluentPort:    fluentLog.Port,
 			FluentHost:    fluentLog.Host,
 			Async:         true,

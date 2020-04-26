@@ -7,7 +7,7 @@ import (
 	"sync"
 )
 
-const FileMode = 0644
+const mask = 0644
 
 // FileLogger is an io.WriteCloser that writes to the specified filename.
 type FileLogger struct {
@@ -26,7 +26,8 @@ func (logger *FileLogger) Write(p []byte) (n int, err error) {
 	defer logger.mu.Unlock()
 
 	if logger.file == nil {
-		if err = logger.openExistingOrNew(); err != nil {
+		err = logger.openExistingOrNew()
+		if err != nil {
 			return 0, err
 		}
 	}
@@ -81,7 +82,7 @@ func (logger *FileLogger) openNew() error {
 	// the renamed (by logrotate) file ourselves. If someone else creates the file
 	// in the meantime, just wipe out the contents.
 	fmt.Println(logger.Filename)
-	f, err := os.OpenFile(logger.Filename, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, os.FileMode(FileMode))
+	f, err := os.OpenFile(logger.Filename, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, os.FileMode(mask))
 	if err != nil {
 		return fmt.Errorf("can't open new logfile: %s", err)
 	}
